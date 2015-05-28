@@ -48,7 +48,7 @@ public class VelocityUtil {
 
 	public static void createFile(TableModel tableModel, String templateName) throws Exception {
 		String content = createFileStr(tableModel, templateName);
-		FileUtil.saveAsFileOutputStream("product/po/" + tableModel.getBeanName() + ".java", content);
+		FileUtil.saveAsFileOutputStream("D:/product/po/" + tableModel.getBeanName() + ".java", content);
 	}
 
 	public static void createFiles(TableModel tableModel) throws Exception {
