@@ -2,7 +2,6 @@ package com.stevy.builder.util;
 
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -11,25 +10,23 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
 
-import com.google.common.collect.Lists;
+import com.stevy.builder.enums.TemplateTypes;
 import com.stevy.builder.model.TableModel;
 
 /**
  * 
  * @author Stevy Qi
- * @Date 2015ƒÍ5‘¬28»’
+ * @Date 2015Âπ¥5Êúà28Êó•
  */
 public class VelocityUtil {
-	
-	private static List<String> templateList = Lists.newArrayList();
-	static{
-		templateList.add("templates/javabean.vm");
-	}
 
-	public static String createFileStr(TableModel tableModel, String templateName) throws Exception {
+	public static String createFileStr(TableModel tableModel, String templateName, String packageName,
+			String subPackageName) throws Exception {
 		VelocityEngine ve = new VelocityEngine();
 		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
 		ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		ve.setProperty("input.encoding", "UTF-8");
+		ve.setProperty("output.encoding", "UTF-8");
 
 		ve.init();
 		Template t = ve.getTemplate(templateName);
@@ -38,6 +35,12 @@ public class VelocityUtil {
 		DateTool dateTool = new DateTool();
 		ctx.put("tableModel", tableModel);
 		ctx.put("now", dateTool.format("yyyy-M-d HH:mm:ss", new Date()));
+		ctx.put("packageName", packageName);
+		ctx.put("beanPackageName", packageName + "." + TemplateTypes.JAVABEAN.getPackageName());
+		ctx.put("xmlPackageName", packageName + "." + TemplateTypes.MYBAITIS_XML.getPackageName());
+		ctx.put("daoPackageName", packageName + "." + TemplateTypes.DAO.getPackageName());
+		ctx.put("servicePackageName", packageName + "." + TemplateTypes.SERVICE.getPackageName());
+		ctx.put("serviceImplPackageName", packageName + "." + TemplateTypes.SERVICE_IMPL.getPackageName());
 
 		StringWriter sw = new StringWriter();
 
@@ -46,14 +49,20 @@ public class VelocityUtil {
 		return sw.toString();
 	}
 
-	public static void createFile(TableModel tableModel, String templateName) throws Exception {
-		String content = createFileStr(tableModel, templateName);
-		FileUtil.saveAsFileOutputStream("D:/product/po/" + tableModel.getBeanName() + ".java", content);
+	public static void createFile(TableModel tableModel, TemplateTypes template, String packageName, String savePath)
+			throws Exception {
+		String content = createFileStr(tableModel, template.getTemplateFileName(), packageName,
+				template.getPackageName());
+		String filePath = savePath + packageName.replaceAll("\\.", "/") + "/"
+				+ template.getPackageName().replaceAll("\\.", "/") + "/" + tableModel.getBeanName()
+				+ template.getExtName();
+		FileUtil.saveAsFileOutputStream(filePath, content);
+		System.out.println("ÁîüÊàêÊñá‰ª∂:" + filePath);
 	}
 
-	public static void createFiles(TableModel tableModel) throws Exception {
-		for (String templateName : templateList) {
-			createFile(tableModel, templateName);
+	public static void createFiles(TableModel tableModel, String packageName, String savePath) throws Exception {
+		for (TemplateTypes template : TemplateTypes.values()) {
+			createFile(tableModel, template, packageName, savePath);
 		}
 	}
 }

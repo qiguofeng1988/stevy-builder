@@ -1,0 +1,22 @@
+package $!{daoPackageName};
+
+import java.util.List;
+
+import $!{beanPackageName}.$!{tableModel.beanName};
+/**
+ * 
+ * @Author stevy.builder
+ * @Create Date $!{now}
+ */
+public interface $!{tableModel.beanName}Mapper {
+
+    int insert($!{tableModel.beanName} bean);
+
+    int delete($!{tableModel.primaryKey.beanType} id);
+
+    int update($!{tableModel.beanName} bean);
+
+    $!{tableModel.beanName} selectOne($!{tableModel.primaryKey.beanType} id);
+    
+    List<$!{tableModel.beanName}> selectList($!{tableModel.beanName} bean);
+}

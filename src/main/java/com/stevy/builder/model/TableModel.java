@@ -10,6 +10,8 @@ public class TableModel {
 
 	private String tableName;
 	private String beanName;
+	private String lowerBeanName;
+	private FieldModel primaryKey;
 	private List<FieldModel> fieldList;
 
 	public String getTableName() {
@@ -28,6 +30,22 @@ public class TableModel {
 		this.beanName = beanName;
 	}
 
+	public String getLowerBeanName() {
+		return lowerBeanName;
+	}
+
+	public void setLowerBeanName(String lowerBeanName) {
+		this.lowerBeanName = lowerBeanName;
+	}
+
+	public FieldModel getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(FieldModel primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
 	public List<FieldModel> getFieldList() {
 		return fieldList;
 	}
@@ -38,7 +56,8 @@ public class TableModel {
 
 	@Override
 	public String toString() {
-		return "TableModel [tableName=" + tableName + ", beanName=" + beanName + ", fieldList=" + fieldList + "]";
+		return "TableModel [tableName=" + tableName + ", beanName=" + beanName + ", primaryKey=" + primaryKey
+				+ ", fieldList=" + fieldList + "]";
 	}
 
 

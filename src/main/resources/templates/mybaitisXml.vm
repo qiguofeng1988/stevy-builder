@@ -1,146 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zcool.gogoup.dao.BannerMapper" >
-  <resultMap id="BaseResultMap" type="com.zcool.gogoup.model.Banner" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="image" property="image" jdbcType="VARCHAR" />
-    <result column="url" property="url" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="ordered" property="ordered" jdbcType="INTEGER" />
-    <result column="bg_color" property="bgColor" jdbcType="VARCHAR" />
-    <result column="deleted" property="deleted" jdbcType="INTEGER" />
-    <result column="teac_id" property="teacId" jdbcType="BIGINT" />
+<mapper namespace="$!{packageName}.$!{daoPackageName}.$!{tableModel.beanName}Mapper" >
+  <resultMap id="BaseResultMap" type="$!{beanPackageName}.$!{tableModel.beanName}" >
+    <id column="$!{tableModel.primaryKey.columnName}" property="$!{tableModel.primaryKey.beanName}" jdbcType="$!{tableModel.primaryKey.columnType}" />
+#foreach($field in $tableModel.fieldList)
+#if($field.columnName != $tableModel.primaryKey.columnName)
+	<result column="$!{field.columnName}" property="$!{field.beanName}" jdbcType="$!{field.columnType}" />
+#end
+#end  
   </resultMap>
+  
   <sql id="Base_Column_List" >
-    id, title, image, url, description, ordered, bg_color, deleted, teac_id
+#foreach($field in $tableModel.fieldList)
+	$!{field.columnName}#if(${velocityCount} != ${tableModel.fieldList.size()}),#end
+#end
+  
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  
+  <select id="selectOne" resultMap="BaseResultMap" parameterType="$!{tableModel.primaryKey.beanType}" >
     select 
     <include refid="Base_Column_List" />
-    from gogoup_banner
-    where id = #{id,jdbcType=BIGINT}
+    from $!{tableModel.tableName}
+    where $!{tableModel.primaryKey.columnName} = #{$!{tableModel.primaryKey.beanName},jdbcType=$!{tableModel.primaryKey.columnType}}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
+  
+  <select id="selectList" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
-    from gogoup_banner where deleted = 1 order by ordered desc
+    from $!{tableModel.tableName} 
+    where 1 = 1
+#foreach($field in $tableModel.fieldList)
+#if($field.columnName != $tableModel.primaryKey.columnName)
+	  <if test="$!{field.beanName} != null" >
+        and $!{field.columnName} = #{$!{field.beanName},jdbcType=$!{field.columnType}}
+      </if>
+#end
+#end
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from gogoup_banner
-    where id = #{id,jdbcType=BIGINT}
+  
+  <delete id="delete" parameterType="$!{tableModel.primaryKey.beanType}" >
+    delete from $!{tableModel.tableName}
+    where $!{tableModel.primaryKey.columnName} = #{$!{tableModel.primaryKey.beanName},jdbcType=$!{tableModel.primaryKey.columnType}}
   </delete>
-  <insert id="insert" parameterType="com.zcool.gogoup.model.Banner" >
-    insert into gogoup_banner (id, title, image, 
-      url, description, ordered, 
-      bg_color, deleted, teac_id
-      )
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{ordered,jdbcType=INTEGER}, 
-      #{bgColor,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, #{teacId,jdbcType=BIGINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.zcool.gogoup.model.Banner" >
-    insert into gogoup_banner
+  
+  <insert id="insert" parameterType="$!{beanPackageName}.$!{tableModel.beanName}" >
+    insert into $!{tableModel.tableName}
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
+#foreach($field in $tableModel.fieldList)
+      <if test="$!{field.beanName} != null" >
+        $!{field.columnName},
       </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="image != null" >
-        image,
-      </if>
-      <if test="url != null" >
-        url,
-      </if>
-      <if test="description != null" >
-        description,
-      </if>
-      <if test="ordered != null" >
-        ordered,
-      </if>
-      <if test="bgColor != null" >
-        bg_color,
-      </if>
-      <if test="deleted != null" >
-        deleted,
-      </if>
-      <if test="teacId != null" >
-        teac_id,
-      </if>
+#end
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+#foreach($field in $tableModel.fieldList)
+  	  <if test="$!{field.beanName} != null" >
+        #{$!{field.beanName},jdbcType=$!{field.columnType}},
       </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="image != null" >
-        #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="url != null" >
-        #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="ordered != null" >
-        #{ordered,jdbcType=INTEGER},
-      </if>
-      <if test="bgColor != null" >
-        #{bgColor,jdbcType=VARCHAR},
-      </if>
-      <if test="deleted != null" >
-        #{deleted,jdbcType=INTEGER},
-      </if>
-      <if test="teacId != null" >
-        #{teacId,jdbcType=BIGINT},
-      </if>
+#end
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zcool.gogoup.model.Banner" >
-    update gogoup_banner
+  
+  <update id="update" parameterType="$!{beanPackageName}.$!{tableModel.beanName}" >
+    update $!{tableModel.tableName}
     <set >
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
+#foreach($field in $tableModel.fieldList)
+#if($field.columnName != $tableModel.primaryKey.columnName)
+  <if test="$!{field.beanName} != null" >
+        $!{field.columnName} = #{$!{field.beanName},jdbcType=$!{field.columnType}},
       </if>
-      <if test="image != null" >
-        image = #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="url != null" >
-        url = #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="ordered != null" >
-        ordered = #{ordered,jdbcType=INTEGER},
-      </if>
-      <if test="bgColor != null" >
-        bg_color = #{bgColor,jdbcType=VARCHAR},
-      </if>
-      <if test="deleted != null" >
-        deleted = #{deleted,jdbcType=INTEGER},
-      </if>
-      <if test="teacId != null" >
-        teac_id = #{teacId,jdbcType=BIGINT},
-      </if>
+#end
+	#end
     </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zcool.gogoup.model.Banner" >
-    update gogoup_banner
-    set title = #{title,jdbcType=VARCHAR},
-      image = #{image,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
-      ordered = #{ordered,jdbcType=INTEGER},
-      bg_color = #{bgColor,jdbcType=VARCHAR},
-      deleted = #{deleted,jdbcType=INTEGER},
-      teac_id = #{teacId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
+    where $!{tableModel.primaryKey.columnName} = #{$!{tableModel.primaryKey.beanName},jdbcType=$!{tableModel.primaryKey.columnType}}
   </update>
 </mapper>

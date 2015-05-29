@@ -79,7 +79,7 @@ public class FileUtil {
 		if (!b) {
 			File tem = new File(file.getParent());
 			// tem.getParentFile().setWritable(true);
-			tem.mkdirs();// ´´½¨Ä¿Â¼
+			tem.mkdirs();// åˆ›å»ºç›®å½•
 		}
 		// Log.info(file.getParent()+";"+file.getParentFile().isDirectory());
 		FileOutputStream foutput = null;
@@ -100,11 +100,11 @@ public class FileUtil {
 				throw new RuntimeException(ex);
 			}
 		}
-		// Log.info("ÎÄ¼ş±£´æ³É¹¦:"+ physicalPath);
+		// Log.info("æ–‡ä»¶ä¿å­˜æˆåŠŸ:"+ physicalPath);
 	}
 
 	/**
-	 * COPYÎÄ¼ş
+	 * COPYæ–‡ä»¶
 	 * 
 	 * @param srcFile
 	 *            String
@@ -149,7 +149,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * COPYÎÄ¼ş¼Ğ
+	 * COPYæ–‡ä»¶å¤¹
 	 * 
 	 * @param sourceDir
 	 *            String
@@ -178,11 +178,11 @@ public class FileUtil {
 	}
 
 	/**
-	 * É¾³ıÖ¸¶¨Ä¿Â¼¼°ÆäÖĞµÄËùÓĞÄÚÈİ¡£
+	 * åˆ é™¤æŒ‡å®šç›®å½•åŠå…¶ä¸­çš„æ‰€æœ‰å†…å®¹ã€‚
 	 * 
 	 * @param dir
-	 *            ÒªÉ¾³ıµÄÄ¿Â¼
-	 * @return É¾³ı³É¹¦Ê±·µ»Øtrue£¬·ñÔò·µ»Øfalse¡£
+	 *            è¦åˆ é™¤çš„ç›®å½•
+	 * @return åˆ é™¤æˆåŠŸæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›falseã€‚
 	 */
 	public boolean deleteDirectory(File dir) {
 		File[] entries = dir.listFiles();

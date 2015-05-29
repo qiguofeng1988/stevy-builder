@@ -17,7 +17,7 @@ import com.stevy.builder.model.TableModel;
 /**
  * 
  * @author Stevy Qi
- * @Date 2015Äê5ÔÂ28ÈÕ
+ * @Date 2015å¹´5æœˆ28æ—¥
  */
 public class TableUtil {
 	
@@ -36,15 +36,25 @@ public class TableUtil {
 		ResultSet tableRet = dbmd.getTables(null, "%", tableName, new String[] { "TABLE" });
 		String sqlTableName;
 		String beanTableName;
+		String lowerBeanTableName;
+		String primaryKey = null;
 		while (tableRet.next()){
 			TableModel tableModel = new TableModel();
 			sqlTableName = tableRet.getString("TABLE_NAME");
+			ResultSet pkRSet = dbmd.getPrimaryKeys(null, null, sqlTableName); 
+			while( pkRSet.next() ) { 
+				if("PRIMARY".equals(pkRSet.getString("PK_NAME")) && 1 == pkRSet.getInt("KEY_SEQ")){
+					primaryKey = pkRSet.getString("COLUMN_NAME");
+				}
+			} 
 			tableModel.setTableName(sqlTableName);
 			if(tablePrefix != null){
 				sqlTableName = sqlTableName.replace(tablePrefix, "");
 			}
 			beanTableName = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, sqlTableName);
+			lowerBeanTableName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, sqlTableName);
 			tableModel.setBeanName(beanTableName);
+			tableModel.setLowerBeanName(lowerBeanTableName);
 			String columnName;
 			String columnType;
 			String beanName;
@@ -58,15 +68,15 @@ public class TableUtil {
 			List<FieldModel> fieldList = Lists.newArrayList();
 			while (colRet.next()) {
 				FieldModel fieldModel = new FieldModel();
-				columnName = colRet.getString("COLUMN_NAME");//COLUMN_NAME¾ÍÊÇ×Ö¶ÎµÄÃû×Ö
-				columnType = colRet.getString("TYPE_NAME");//TYPE_NAME¾ÍÊÇÊı¾İÀàĞÍ
+				columnName = colRet.getString("COLUMN_NAME");//COLUMN_NAMEå°±æ˜¯å­—æ®µçš„åå­—
+				columnType = colRet.getString("TYPE_NAME");//TYPE_NAMEå°±æ˜¯æ•°æ®ç±»å‹
 				beanName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, columnName);
-				suffixBeanName = beanName.substring(0, 1).toUpperCase() + beanName.substring(1, beanName.length());
-				beanType = FieldTypes.getValue(NumberUtils.toInt(colRet.getString("DATA_TYPE")));//TYPE_NAMEÀ´×Ô java.sql.Types µÄ SQL ÀàĞÍ
-				remark = colRet.getString("REMARKS");//REMARKS ÃèÊöÁĞµÄ×¢ÊÍ£¨¿ÉÎª null£©
-				datasize = colRet.getInt("COLUMN_SIZE");//COLUMN_SIZE·µ»ØÕûÊı£¬¾ÍÊÇ×Ö¶ÎµÄ³¤¶È
-				digits = colRet.getInt("DECIMAL_DIGITS");//Ğ¡Êı²¿·ÖµÄÎ»Êı
-				nullable = colRet.getInt("NULLABLE");//×îºóNULLABLE£¬·µ»Ø1¾Í±íÊ¾¿ÉÒÔÊÇNull,¶ø0¾Í±íÊ¾Not Null
+				suffixBeanName = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, columnName);
+				beanType = FieldTypes.getValue(NumberUtils.toInt(colRet.getString("DATA_TYPE")));//TYPE_NAMEæ¥è‡ª java.sql.Types çš„ SQL ç±»å‹
+				remark = colRet.getString("REMARKS");//REMARKS æè¿°åˆ—çš„æ³¨é‡Šï¼ˆå¯ä¸º nullï¼‰
+				datasize = colRet.getInt("COLUMN_SIZE");//COLUMN_SIZEè¿”å›æ•´æ•°ï¼Œå°±æ˜¯å­—æ®µçš„é•¿åº¦
+				digits = colRet.getInt("DECIMAL_DIGITS");//å°æ•°éƒ¨åˆ†çš„ä½æ•°
+				nullable = colRet.getInt("NULLABLE");//æœ€åNULLABLEï¼Œè¿”å›1å°±è¡¨ç¤ºå¯ä»¥æ˜¯Null,è€Œ0å°±è¡¨ç¤ºNot Null
 				fieldModel.setColumnName(columnName);
 				fieldModel.setColumnType(columnType);
 				fieldModel.setDatasize(datasize);
@@ -77,10 +87,14 @@ public class TableUtil {
 				fieldModel.setNullable(nullable);
 				fieldModel.setRemark(remark);
 				fieldList.add(fieldModel);
+				if(columnName.equals(primaryKey)){
+					tableModel.setPrimaryKey(fieldModel);
+				}
 			}
 			tableModel.setFieldList(fieldList);
 			tableList.add(tableModel);
 		}
 		return tableList;
 	}
+	
 }

@@ -1,4 +1,4 @@
-package com.stevy.model;
+package $!{beanPackageName};
 /**
  * 
  * @Author stevy.builder

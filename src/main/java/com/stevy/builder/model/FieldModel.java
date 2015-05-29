@@ -110,8 +110,8 @@ public class FieldModel {
 	@Override
 	public String toString() {
 		return "FieldModel [columnName=" + columnName + ", columnType=" + columnType + ", beanName=" + beanName
-				+ ", beanType=" + beanType + ", remark=" + remark + ", datasize=" + datasize + ", digits=" + digits
-				+ ", nullable=" + nullable + "]";
+				+ ", suffixBeanName=" + suffixBeanName + ", beanType=" + beanType + ", remark=" + remark
+				+ ", datasize=" + datasize + ", digits=" + digits + ", nullable=" + nullable + "]";
 	}
 
 }
