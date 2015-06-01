@@ -10,13 +10,13 @@ import $!{beanPackageName}.$!{tableModel.beanName};
  */
 public interface $!{tableModel.beanName}Mapper {
 
-    int insert($!{tableModel.beanName} bean);
+    int insert($!{tableModel.beanName} $!{tableModel.lowerBeanName});
 
-    int delete($!{tableModel.primaryKey.beanType} id);
+    int delete($!{tableModel.primaryKey.beanType} $!{tableModel.primaryKey.beanName});
 
-    int update($!{tableModel.beanName} bean);
+    int update($!{tableModel.beanName} $!{tableModel.lowerBeanName});
 
-    $!{tableModel.beanName} selectOne($!{tableModel.primaryKey.beanType} id);
+    $!{tableModel.beanName} selectOne($!{tableModel.primaryKey.beanType} $!{tableModel.primaryKey.beanName});
     
-    List<$!{tableModel.beanName}> selectList($!{tableModel.beanName} bean);
+    List<$!{tableModel.beanName}> selectList($!{tableModel.beanName} $!{tableModel.lowerBeanName});
 }

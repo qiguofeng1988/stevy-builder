@@ -41,6 +41,7 @@ public class VelocityUtil {
 		ctx.put("daoPackageName", packageName + "." + TemplateTypes.DAO.getPackageName());
 		ctx.put("servicePackageName", packageName + "." + TemplateTypes.SERVICE.getPackageName());
 		ctx.put("serviceImplPackageName", packageName + "." + TemplateTypes.SERVICE_IMPL.getPackageName());
+		ctx.put("controllerPackageName", packageName + "." + TemplateTypes.CONTROLLER.getPackageName());
 
 		StringWriter sw = new StringWriter();
 

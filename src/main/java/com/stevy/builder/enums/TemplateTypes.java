@@ -12,14 +12,16 @@ package com.stevy.builder.enums;
  * REF_CURSOR:2012 TIME_WITH_TIMEZONE:2013 TIMESTAMP_WITH_TIMEZONE:2014
  * 
  * @author Stevy Qi
- * @Date 2015Äê5ÔÂ28ÈÕ
+ * @Date 2015ï¿½ï¿½5ï¿½ï¿½28ï¿½ï¿½
  */
 public enum TemplateTypes {
 	JAVABEAN(1, "templates/javabean.vm", ".java", "model"),
 	DAO(2, "templates/dao.vm", "Mapper.java", "dao"),
 	MYBAITIS_XML(3, "templates/mybaitisXml.vm", "Mapper.xml", "mapper"),
 	SERVICE(4, "templates/service.vm", "Service.java", "service"),
-	SERVICE_IMPL(5, "templates/serviceImpl.vm", "ServiceImpl.java", "service.impl");
+	SERVICE_IMPL(5, "templates/serviceImpl.vm", "ServiceImpl.java", "service.impl"),
+	CONTROLLER(6, "templates/controller.vm", "Controller.java", "controller"),
+	LIST_VIEW(7, "templates/listView.vm", "_list.vm", "views");
 
 	private TemplateTypes(int key, String templateFileName, String extName, String packageName) {
 		this.key = key;
